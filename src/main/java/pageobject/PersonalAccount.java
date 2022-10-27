@@ -1,4 +1,4 @@
-package pageObject;
+package pageobject;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
@@ -18,6 +18,6 @@ public class PersonalAccount {
 
     @Step("Отображение текста 'В этом разделе вы можете изменить свои персональные данные'")
     public static void messageOfEditDataAvailable() {
-        messageOfEditData.shouldBe(Condition.exist);
+        messageOfEditData.shouldBe(Condition.visible);
     }
 }

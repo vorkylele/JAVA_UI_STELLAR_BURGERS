@@ -1,4 +1,4 @@
-package pageObject;
+package pageobject;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
@@ -16,9 +16,9 @@ public class MainPage {
     SelenideElement saucesButton = $(By.xpath("//span[text()='Соусы']"));
     SelenideElement fillingsButton = $(By.xpath("//span[text()='Начинки']"));
     SelenideElement placeOrderButton = $(By.xpath("//button[text()='Оформить заказ']"));
-    SelenideElement logoOfBunsButton = $(By.xpath("//h2[text()='Булки']"));
-    SelenideElement logoOfSaucesButton = $(By.xpath("//h2[text()='Соусы']"));
-    SelenideElement logoOfFillingsButton = $(By.xpath("//h2[text()='Начинки']"));
+    SelenideElement logoOfBunsButton = $(By.xpath("//div[@class='tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text()='Булки']"));
+    SelenideElement logoOfSaucesButton = $(By.xpath("//div[@class='tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text()='Соусы']"));
+    SelenideElement logoOfFillingsButton = $(By.xpath("//div[@class='tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect']/span[text()='Начинки']"));
 
     @Step("Клик по кнопке 'Войти в аккаунт'")
     public void clickLoginInAccountButton() {
@@ -57,21 +57,21 @@ public class MainPage {
 
     @Step("Отображение кнопки 'Оформить заказ'")
     public void placeOrderButtonAvailable() {
-        placeOrderButton.shouldBe(Condition.exist);
+        placeOrderButton.shouldBe(Condition.visible);
     }
 
     @Step("Отображение лого 'Булки'")
     public void logoOfBunsButtonVisible() {
-        logoOfBunsButton.shouldBe(Condition.exist);
+        logoOfBunsButton.shouldBe(Condition.visible);
     }
 
     @Step("Отображение лого 'Соусы'")
     public void logoOfSaucesButtonVisible() {
-        logoOfSaucesButton.shouldBe(Condition.exist);
+        logoOfSaucesButton.shouldBe(Condition.visible);
     }
 
     @Step("Отображение лого 'Начинки'")
     public void logoOfFillingsButtonVisible() {
-        logoOfFillingsButton.shouldBe(Condition.exist);
+        logoOfFillingsButton.shouldBe(Condition.visible);
     }
 }

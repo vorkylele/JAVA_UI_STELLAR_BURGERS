@@ -1,4 +1,4 @@
-import SupportingData.User;
+import supportingdata.User;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
@@ -7,10 +7,10 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import pageObject.RegistrationPage;
+import pageobject.RegistrationPage;
 
-import static SupportingData.URLs.LOGIN_PAGE;
-import static SupportingData.URLs.REGISTER_PAGE;
+import static supportingdata.URLs.LOGIN_PAGE;
+import static supportingdata.URLs.REGISTER_PAGE;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.url;

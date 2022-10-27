@@ -1,4 +1,4 @@
-import SupportingData.User;
+import supportingdata.User;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -8,17 +8,19 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import pageObject.ForgotPasswordPage;
-import pageObject.LoginPage;
-import pageObject.MainPage;
-import pageObject.RegistrationPage;
+import pageobject.ForgotPasswordPage;
+import pageobject.LoginPage;
+import pageobject.MainPage;
+import pageobject.RegistrationPage;
+import supportingdata.UserSteps;
+import supportingdata.deleteUser;
 
-import static SupportingData.URLs.*;
+import static supportingdata.URLs.*;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 @DisplayName("Вход")
-public class LoginTest {
+public class LoginTest extends deleteUser {
     User user;
 
     @Before
@@ -29,20 +31,13 @@ public class LoginTest {
         WebDriver driver = new ChromeDriver(options);
         setWebDriver(driver);
         user = User.createNewUser();
+        UserSteps.createUser(user);
     }
 
     @Test
-    @DisplayName("Вход по кнопке «Войти в аккаунт» на главной")
+    @DisplayName("Вход по кнопке «Войти» в аккаунт» на главной")
     @Description("ОР: Перенаправление на главную страницу")
     public void loginFromMainPage() {
-
-        RegistrationPage registerPage = open(REGISTER_PAGE, RegistrationPage.class);
-
-        registerPage.setNameField(user.getName());
-        registerPage.setEmailField(user.getEmail());
-        registerPage.setPasswordField(user.getPassword());
-        registerPage.clickRegistrationButton();
-
         MainPage mainPage = open(MAIN_PAGE, MainPage.class);
 
         mainPage.clickLoginInAccountButton();
@@ -56,16 +51,9 @@ public class LoginTest {
     }
 
     @Test
-    @DisplayName("Вход по кнопке «Личный кабинет")
+    @DisplayName("Вход по кнопке «Личный кабинет»")
     @Description("ОР: Перенаправление на главную страницу")
     public void loginFromPersonalAccount() {
-        RegistrationPage registerPage = open(REGISTER_PAGE, RegistrationPage.class);
-
-        registerPage.setNameField(user.getName());
-        registerPage.setEmailField(user.getEmail());
-        registerPage.setPasswordField(user.getPassword());
-        registerPage.clickRegistrationButton();
-
         MainPage mainPage = open(MAIN_PAGE, MainPage.class);
 
         mainPage.clickPersonalAccountButton();
@@ -78,17 +66,10 @@ public class LoginTest {
     }
 
     @Test
-    @DisplayName("Вход по кнопке «Войти в форме регистрации")
+    @DisplayName("Вход по кнопке «Войти» в форме регистрации»")
     @Description("ОР: Перенаправление на главную страницу")
     public void logInFromRegistrationPage() {
         RegistrationPage registerPage = open(REGISTER_PAGE, RegistrationPage.class);
-
-        registerPage.setNameField(user.getName());
-        registerPage.setEmailField(user.getEmail());
-        registerPage.setPasswordField(user.getPassword());
-        registerPage.clickRegistrationButton();
-
-        registerPage = open(REGISTER_PAGE, RegistrationPage.class);
         registerPage.clickLogInButton();
 
         LoginPage loginPage = new LoginPage();
@@ -101,16 +82,9 @@ public class LoginTest {
     }
 
     @Test
-    @DisplayName("Вход по кнопке «Войти в форме регистрации в форме восстановления пароля перенаправляет на главную страницу")
+    @DisplayName("Вход по кнопке «Войти» в форме регистрации в форме восстановления пароля перенаправляет на главную страницу")
     @Description("ОР: Перенаправление на главную страницу")
     public void logInFromForgotPasswordPage() {
-        RegistrationPage registerPage = open(REGISTER_PAGE, RegistrationPage.class);
-
-        registerPage.setNameField(user.getName());
-        registerPage.setEmailField(user.getEmail());
-        registerPage.setPasswordField(user.getPassword());
-        registerPage.clickRegistrationButton();
-
         ForgotPasswordPage forgotPasswordPage = open(FORGOT_PASSWORD_PAGE, ForgotPasswordPage.class);
         forgotPasswordPage.clickLogInButton();
 
@@ -126,5 +100,6 @@ public class LoginTest {
     @After
     public void tearDown() {
         Selenide.closeWebDriver();
+        deleteUser();
     }
 }

@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import pageObject.MainPage;
+import pageobject.MainPage;
 
-import static SupportingData.URLs.MAIN_PAGE;
+import static supportingdata.URLs.MAIN_PAGE;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
@@ -43,10 +43,9 @@ public class SectionConstructor {
     @DisplayName("Переход разделу «Начинки»")
     public void transitionToTheFillingsSection() {
         MainPage mainPage = open(MAIN_PAGE, MainPage.class);
-        mainPage.logoOfFillingsButtonVisible();
+        mainPage.clickFillingsButton();
         mainPage.logoOfFillingsButtonVisible();
     }
-
 
     @After
     public void tearDown() {
