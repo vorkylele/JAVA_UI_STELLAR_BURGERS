@@ -1,3 +1,4 @@
+import io.restassured.response.ValidatableResponse;
 import supportingdata.User;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
@@ -13,15 +14,16 @@ import pageobject.LoginPage;
 import pageobject.MainPage;
 import pageobject.RegistrationPage;
 import supportingdata.UserSteps;
-import supportingdata.deleteUser;
 
 import static supportingdata.URLs.*;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 @DisplayName("Вход")
-public class LoginTest extends deleteUser {
+public class LoginTest {
     User user;
+    private UserSteps userSteps = new UserSteps();
+    ValidatableResponse response;
 
     @Before
     public void setUp() {
@@ -31,7 +33,7 @@ public class LoginTest extends deleteUser {
         WebDriver driver = new ChromeDriver(options);
         setWebDriver(driver);
         user = User.createNewUser();
-        UserSteps.createUser(user);
+        userSteps.createUser(user);
     }
 
     @Test
@@ -100,6 +102,9 @@ public class LoginTest extends deleteUser {
     @After
     public void tearDown() {
         Selenide.closeWebDriver();
-        deleteUser();
-    }
+        response = userSteps.loginUser(user);
+        String token = User.getAccessToken(response);
+        user.setAccessToken(token);
+        userSteps.deleteUser(user);
+        }
 }

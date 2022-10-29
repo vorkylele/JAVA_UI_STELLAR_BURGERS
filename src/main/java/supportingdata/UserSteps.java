@@ -2,9 +2,9 @@ package supportingdata;
 
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.response.Response;
+import io.restassured.RestAssured;
+import io.restassured.response.ValidatableResponse;
 
-import static io.restassured.RestAssured.given;
 import static supportingdata.URLs.*;
 
 public class UserSteps extends RestClient{
@@ -13,40 +13,73 @@ public class UserSteps extends RestClient{
 
     @DisplayName("Создание пользователя")
     @Step("Создание пользователя")
-    public static Response createUser(User body) {
-        return given()
-                .spec(REQUEST_SPECIFICATION)
+    public ValidatableResponse createUser(User body) {
+        return RestAssured.given()
+                .spec(getBaseSpec())
                 .body(body)
                 .when()
-                .post(REGISTER);
+                .post(AUTH + REGISTER)
+                .then().log().ifError();
     }
 
     @DisplayName("Авторизация пользователя")
     @Step("Авторизация пользователя")
-    public static Response loginUser(User body) {
-        return given()
-                .spec(REQUEST_SPECIFICATION)
-                .body(body)
+    public ValidatableResponse loginUser(User user) {
+        return RestAssured.given()
+                .spec(getBaseSpec())
+                .body(user)
                 .when()
-                .post(LOGIN);
+                .post(AUTH + LOGIN)
+                .then()
+                .log().ifError();
+
     }
 
     @DisplayName("Получение access token пользователя")
     @Step("Получение access token пользователя")
-    public static String getAccessToken(User body) {
-        return loginUser(body)
-                .then()
+    public String getAccessToken(User user) {
+        return loginUser(user)
                 .extract()
                 .path("accessToken");
     }
 
+    @DisplayName("Изменение данных пользователя без авторизации")
+    @Step("Изменение данных пользователя без авторизации")
+    public ValidatableResponse updateWithoutAuth(User user) {
+        return RestAssured.given()
+                .spec(getBaseSpec())
+                .body(user)
+                .when()
+                .patch(AUTH +USER)
+                .then()
+                .log().ifError();
+    }
+
+    @DisplayName("Изменение данных пользователя с авторизацией")
+    @Step("Изменение данных пользователя с авторизацией")
+    public ValidatableResponse updateDataOfUser(User user, String accessToken) {
+        return RestAssured.given()
+                .spec(getBaseSpec())
+                .header("Authorization", accessToken)
+                .body(user)
+                .when()
+                .patch(AUTH +USER)
+                .then()
+                .log().ifError();
+    }
+
     @DisplayName("Удаление пользователя")
     @Step("Удаление пользователя")
-    public Response deleteUser(String accessToken) {
-        return given()
-                .spec(REQUEST_SPECIFICATION)
-                .header("Authorization", accessToken)
+    public void deleteUser(User user) {
+        RestAssured.given()
+                .spec(getBaseSpec())
+                .auth().oauth2(user.getAccessToken())
+                .body(user)
                 .when()
-                .delete(USER);
+                .delete(AUTH +USER)
+                .then()
+                .assertThat()
+                .statusCode(202)
+                .log().ifError();
     }
 }

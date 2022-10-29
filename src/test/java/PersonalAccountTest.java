@@ -1,4 +1,4 @@
-import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import supportingdata.User;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
@@ -11,10 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import pageobject.LoginPage;
 import pageobject.PersonalAccount;
-import pageobject.RegistrationPage;
 import pageobject.MainPage;
 import supportingdata.UserSteps;
-import supportingdata.deleteUser;
 
 
 import static supportingdata.URLs.*;
@@ -24,8 +22,11 @@ import static com.codeborne.selenide.WebDriverConditions.url;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 
 @DisplayName("Переход по клику на «Личный кабинет»/Переход из личного кабинета в конструктор/Выход из аккаунта")
-public class PersonalAccountTest extends deleteUser {
+public class PersonalAccountTest {
     User user;
+    private UserSteps userSteps = new UserSteps();
+    ValidatableResponse response;
+
 
     @Before
     public void setUp() {
@@ -35,7 +36,7 @@ public class PersonalAccountTest extends deleteUser {
         WebDriver driver = new ChromeDriver(options);
         setWebDriver(driver);
         user = User.createNewUser();
-        UserSteps.createUser(user);
+        userSteps.createUser(user);
     }
 
     @Test
@@ -123,6 +124,9 @@ public class PersonalAccountTest extends deleteUser {
     @After
     public void tearDown() {
         Selenide.closeWebDriver();
-        deleteUser();
+        response = userSteps.loginUser(user);
+        String token = User.getAccessToken(response);
+        user.setAccessToken(token);
+        userSteps.deleteUser(user);
     }
 }
